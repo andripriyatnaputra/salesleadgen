@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /home/andriputra/starcom-leadgen/src/agents/sources /home/andriputra/starcom-leadgen/src/config /home/andriputra/starcom-leadgen/src/templates /home/andriputra/starcom-leadgen/src/output)",
+      "Bash(npx tsc *)",
+      "Bash(curl -s --max-time 30 -L \"https://civd.skkmigas.go.id/index.jwebs\" -A \"Mozilla/5.0\")"
+    ],
+    "additionalDirectories": [
+      "/home/andriputra/starcom-leadgen/src/agents"
+    ]
+  }
+}

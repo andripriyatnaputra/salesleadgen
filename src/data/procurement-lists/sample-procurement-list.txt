@@ -1,0 +1,13 @@
+SKK MIGAS Procurement List 2026 - Sample Data
+Format: No | KKKS | NDP | Tender Title | Expected Invitation Date | Currency | Estimated Value | Minimum TKDN
+
+1 | Premier Oil Natuna Sea B.V. | 11/NDP/2026 | Pengadaan Sistem Jaringan Komunikasi Data VSAT dan Radio | 15 Maret 2026 | IDR | 2500000000 | 40
+2 | PT Pertamina Hulu Energi | 12/NDP/2026 | Penyediaan Sistem CCTV IP Camera dan Access Control | 20 Maret 2026 | USD | 500000 | 35
+3 | CNOOC SES Ltd. | 13/NDP/2026 | Implementasi ERP System SAP dan IT Infrastructure | 25 Maret 2026 | USD | 1200000 | 30
+4 | BP Berau Ltd. | 14/NDP/2026 | Upgrade Network Infrastructure dan Cybersecurity System | 1 April 2026 | IDR | 3500000000 | 45
+5 | Eni Muara Bakau B.V. | 15/NDP/2026 | Penyediaan Cloud Services dan Virtualization Platform | 10 April 2026 | USD | 800000 | 25
+6 | Chevron Indonesia Company | 16/NDP/2026 | Sistem Monitoring SCADA dan IoT Sensor Network | 15 April 2026 | USD | 950000 | 35
+7 | ConocoPhillips Grissik Ltd. | 17/NDP/2026 | Fiber Optic Network Installation dan Bandwidth Upgrade | 20 April 2026 | IDR | 1800000000 | 40
+8 | Medco E&P Indonesia | 18/NDP/2026 | Software Development Custom Application dan Mobile Apps | 25 April 2026 | IDR | 1200000000 | 50
+9 | PHE ONWJ | 19/NDP/2026 | Server Infrastructure dan Data Center Cooling System | 1 Mei 2026 | IDR | 2200000000 | 45
+10 | Husky-CNOOC Madura Ltd. | 20/NDP/2026 | Telecommunications Equipment dan Satellite Communication | 5 Mei 2026 | USD | 650000 | 30

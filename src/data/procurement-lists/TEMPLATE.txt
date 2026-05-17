@@ -1,0 +1,19 @@
+SKK MIGAS Procurement List Template
+Format: No | KKKS | NDP | Tender Title | Expected Invitation Date | Currency | Estimated Value | Minimum TKDN
+
+Contoh Data:
+1 | Premier Oil Natuna Sea B.V. | 11/NDP/2026 | Pengadaan Sistem Jaringan Komunikasi Data | 15 Maret 2026 | IDR | 2500000000 | 40
+2 | PT Pertamina Hulu Energi | 12/NDP/2026 | Penyediaan Sistem CCTV dan Access Control | 20 Maret 2026 | USD | 500000 | 35
+3 | CNOOC SES Ltd. | 13/NDP/2026 | Implementasi ERP System dan IT Infrastructure | 25 Maret 2026 | USD | 1200000 | 30
+4 | BP Berau Ltd. | 14/NDP/2026 | Upgrade Network Infrastructure dan Cybersecurity | 1 April 2026 | IDR | 3500000000 | 45
+5 | Eni Muara Bakau B.V. | 15/NDP/2026 | Penyediaan Cloud Services dan Virtualization | 10 April 2026 | USD | 800000 | 25
+
+Instruksi:
+1. Setiap baris = 1 tender
+2. Pisahkan kolom dengan karakter pipe (|)
+3. Nilai proyek dalam angka tanpa titik/koma untuk ribuan (contoh: 2500000000 untuk 2.5 miliar)
+4. TKDN dalam angka 0-100 (persen)
+5. Tanggal dalam format "DD Bulan YYYY" atau "DD/MM/YYYY"
+
+Paste data procurement list Anda di bawah ini:
+---

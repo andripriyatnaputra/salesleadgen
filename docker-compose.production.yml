@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: starcom-leadgen-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: salesdb
+      POSTGRES_USER: sales
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sales123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sales -d salesdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - starcom-network
+
+  # Backend - Scraping Agents
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: starcom-leadgen-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://sales:${POSTGRES_PASSWORD:-sales123}@postgres:5432/salesdb?sslmode=disable
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      PENGADAAN_EMAIL: ${PENGADAAN_EMAIL}
+      PENGADAAN_PASSWORD: ${PENGADAAN_PASSWORD}
+      PENGADAAN_TOKEN: ${PENGADAAN_TOKEN}
+      CIVD_USERNAME: ${CIVD_USERNAME}
+      CIVD_PASSWORD: ${CIVD_PASSWORD}
+      HUNTER_API_KEY: ${HUNTER_API_KEY}
+    volumes:
+      - ./src/output:/app/src/output
+      - ./logs:/app/logs
+    networks:
+      - starcom-network
+    # Run agents on schedule (using cron in container or external scheduler)
+    command: ["npx", "tsx", "src/agents-runner.ts", "civd", "pengadaan", "bjb", "airnav", "pamjaya"]
+
+  # Frontend - Next.js Dashboard
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: starcom-leadgen-web
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://sales:${POSTGRES_PASSWORD:-sales123}@postgres:5432/salesdb?sslmode=disable
+    ports:
+      - "3100:3100"
+    networks:
+      - starcom-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  starcom-network:
+    driver: bridge

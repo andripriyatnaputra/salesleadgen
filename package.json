@@ -1,0 +1,38 @@
+{
+  "name": "starcom-leadgen",
+  "version": "1.0.0",
+  "description": "Sistem lead generation otomatis untuk PT Starcom Solusindo",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "agents": "tsx src/agents-runner.ts",
+    "db:migrate": "tsx database/migrate.ts",
+    "db:test": "tsx -e \"import {pool} from './src/config/database.js'; pool.query('SELECT NOW()').then(r => console.log('DB OK:', r.rows[0])).finally(() => pool.end())\"",
+    "web": "cd web && npm run dev"
+  },
+  "keywords": [
+    "leadgen",
+    "tender",
+    "lpse",
+    "anthropic"
+  ],
+  "author": "PT Starcom Solusindo",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.1",
+    "@types/pg": "^8.20.0",
+    "axios": "^1.16.0",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

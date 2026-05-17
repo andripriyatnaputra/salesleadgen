@@ -1,0 +1,39 @@
+# Node modules
+node_modules
+npm-debug.log
+
+# Output files
+src/output/*
+logs/*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Web folder (has its own Dockerfile)
+web/
+
+# Docs
+*.md
+docs/
+
+# Tests
+*.test.ts
+*.spec.ts
+__tests__/

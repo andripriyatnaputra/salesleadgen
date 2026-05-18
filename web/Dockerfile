@@ -15,7 +15,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Environment variables for build
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build Next.js
 RUN npm run build
@@ -24,13 +24,14 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Create public folder for static assets (if any)
+RUN mkdir -p ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -44,7 +45,7 @@ USER nextjs
 
 EXPOSE 3100
 
-ENV PORT 3100
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3100
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

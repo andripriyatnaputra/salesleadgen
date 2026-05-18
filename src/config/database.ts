@@ -1,6 +1,6 @@
 import pkg from "pg";
 const { Pool } = pkg;
-import type { PoolClient, QueryResult } from "pg";
+import type { PoolClient, QueryResult, QueryResultRow } from "pg";
 
 // ─── Database Configuration ───────────────────────────────────────────────────
 
@@ -29,7 +29,7 @@ pool.on("error", (err) => {
 
 // ─── Query Helpers ────────────────────────────────────────────────────────────
 
-export async function query<T = any>(
+export async function query<T extends QueryResultRow = any>(
   text: string,
   params?: any[]
 ): Promise<QueryResult<T>> {
@@ -46,7 +46,7 @@ export async function query<T = any>(
 }
 
 export async function getClient(): Promise<PoolClient> {
-  return await pool.query();
+  return await pool.connect();
 }
 
 // ─── Transaction Helper ───────────────────────────────────────────────────────

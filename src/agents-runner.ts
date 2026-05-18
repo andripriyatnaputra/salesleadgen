@@ -9,7 +9,7 @@ import { fetchBpjsTenders } from "./agents/sources/bpjsAgent.js";
 import { fetchBjbTenders } from "./agents/sources/bjbAgent.js";
 import { fetchAirnavTenders } from "./agents/sources/airnavAgent.js";
 import { classifyLeads } from "./agents/classifierAgent.js";
-import { qualifyLeads } from "./agents/qualifierAgent.js";
+import { qualifyLeads, type QualifiedLead } from "./agents/qualifierAgent.js";
 import { generateOutreach } from "./agents/outreachAgent.js";
 import type { Lead } from "./config/claude.js";
 import { LeadRepository, pool, type RawLead } from "./config/database.js";
@@ -232,19 +232,24 @@ async function main() {
     }
 
     // Qualifier
+    let qualifiedLeads: QualifiedLead[] = [];
     if (selectedAgents.includes("qualifier")) {
       console.log("[3] Menjalankan Qualifier Agent...");
-      const qualified = qualifyLeads(rawLeads);
-      const lolos = qualified.filter((l) => l.isQualified);
+      qualifiedLeads = qualifyLeads(rawLeads);
+      const lolos = qualifiedLeads.filter((l) => l.isQualified);
       console.log(`  ✓ ${lolos.length} leads qualified (score >= 70)\n`);
-      rawLeads = qualified; // Update untuk agent selanjutnya
     }
 
     // Outreach
     if (selectedAgents.includes("outreach")) {
       console.log("[4] Menjalankan Outreach Agent...");
-      const output = await generateOutreach(rawLeads);
-      console.log(`  ✓ ${output.totalLeads} email draft tersimpan\n`);
+      // Outreach needs qualified leads, so qualifier must run first
+      if (qualifiedLeads.length === 0) {
+        console.log("⚠️  Outreach memerlukan qualifier agent. Jalankan qualifier terlebih dahulu.");
+      } else {
+        const output = await generateOutreach(qualifiedLeads);
+        console.log(`  ✓ ${output.totalLeads} email draft tersimpan\n`);
+      }
     }
   }
 

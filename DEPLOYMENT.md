@@ -106,7 +106,17 @@ ssh-copy-id -i ~/.ssh/starcom_deploy.pub user@server-ip
 cat ~/.ssh/starcom_deploy
 ```
 
-### 3. Trigger Deployment
+### 3. Make Docker Images Public (Important!)
+
+GitHub Container Registry packages are private by default. Make them public:
+
+1. Go to: https://github.com/users/andripriyatnaputra/packages
+2. Click on `salesleadgen-backend` → **Package settings** → Change visibility to **Public**
+3. Click on `salesleadgen-web` → **Package settings** → Change visibility to **Public**
+
+**Why?** Production server needs to pull images without authentication.
+
+### 4. Trigger Deployment
 
 Deployment is triggered automatically on:
 - Push to `main` branch
@@ -118,6 +128,14 @@ git add .
 git commit -m "Deploy to production"
 git push origin main
 ```
+
+**What happens:**
+1. ✅ GitHub Actions builds Docker images
+2. ✅ Pushes to GitHub Container Registry (GHCR)
+3. ✅ SSH to production server
+4. ✅ Pulls latest images from GHCR
+5. ✅ Restarts containers with new images
+6. ✅ Runs database migrations
 
 ## Manual Agent Execution
 

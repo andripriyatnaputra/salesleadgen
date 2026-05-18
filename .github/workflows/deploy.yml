@@ -136,18 +136,21 @@ jobs:
           script: |
             cd /opt/starcom-leadgen
 
-            # Pull latest code
+            # Pull latest code (for docker-compose.yml and .env updates)
             git pull origin main
 
-            # Pull latest Docker images
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:latest
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_WEB }}:latest
+            # Pull latest Docker images from GHCR (public images)
+            docker pull ghcr.io/andripriyatnaputra/salesleadgen-backend:latest
+            docker pull ghcr.io/andripriyatnaputra/salesleadgen-web:latest
 
             # Stop and remove old containers
             docker-compose -f docker-compose.production.yml down
 
-            # Start new containers
+            # Start new containers with pulled images
             docker-compose -f docker-compose.production.yml up -d
+
+            # Wait for containers to be ready
+            sleep 10
 
             # Run database migrations
             docker-compose -f docker-compose.production.yml exec -T backend npx tsx database/migrate.ts

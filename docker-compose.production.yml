@@ -24,11 +24,10 @@ services:
 
   # Backend - Scraping Agents
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/andripriyatnaputra/salesleadgen-backend:latest
     container_name: starcom-leadgen-backend
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -52,11 +51,10 @@ services:
 
   # Frontend - Next.js Dashboard
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    image: ghcr.io/andripriyatnaputra/salesleadgen-web:latest
     container_name: starcom-leadgen-web
     restart: unless-stopped
+    pull_policy: always
     depends_on:
       postgres:
         condition: service_healthy

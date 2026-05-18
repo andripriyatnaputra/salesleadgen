@@ -1,0 +1,23 @@
+# Development Dockerfile for Starcom LeadGen Backend
+FROM node:18-alpine
+
+# Install development dependencies
+RUN apk add --no-cache git
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies)
+RUN npm install
+
+# Copy source code (will be overridden by volume mount)
+COPY . .
+
+# Expose port for debugging
+EXPOSE 9229
+
+# Default command - can be overridden
+CMD ["npx", "tsx", "watch", "src/agents-runner.ts"]

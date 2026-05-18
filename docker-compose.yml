@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (Local)
+  postgres:
+    image: postgres:15
+    container_name: starcom-leadgen-db-local
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: salesdb
+      POSTGRES_USER: sales
+      POSTGRES_PASSWORD: sales123
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sales -d salesdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - starcom-network
+
+  # Backend - Scraping Agents (Development with hot reload)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: starcom-leadgen-backend-local
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://sales:sales123@postgres:5432/salesdb?sslmode=disable
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      PENGADAAN_EMAIL: ${PENGADAAN_EMAIL}
+      PENGADAAN_PASSWORD: ${PENGADAAN_PASSWORD}
+      CIVD_USERNAME: ${CIVD_USERNAME}
+      CIVD_PASSWORD: ${CIVD_PASSWORD}
+    volumes:
+      - ./src:/app/src
+      - ./database:/app/database
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./src/output:/app/src/output
+      - ./logs:/app/logs
+    networks:
+      - starcom-network
+    command: ["tail", "-f", "/dev/null"]  # Keep container running for manual commands
+
+  # Frontend - Next.js Dashboard (Development with hot reload)
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    container_name: starcom-leadgen-web-local
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://sales:sales123@postgres:5432/salesdb?sslmode=disable
+    volumes:
+      - ./web/src:/app/src
+      - ./web/public:/app/public
+      - ./web/next.config.mjs:/app/next.config.mjs
+      - ./web/tailwind.config.ts:/app/tailwind.config.ts
+      - ./web/tsconfig.json:/app/tsconfig.json
+    ports:
+      - "3100:3100"
+    networks:
+      - starcom-network
+    command: ["npm", "run", "dev"]
+
+volumes:
+  postgres_data_local:
+    driver: local
+
+networks:
+  starcom-network:
+    driver: bridge

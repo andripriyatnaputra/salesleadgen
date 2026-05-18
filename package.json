@@ -11,7 +11,22 @@
     "agents": "tsx src/agents-runner.ts",
     "db:migrate": "tsx database/migrate.ts",
     "db:test": "tsx -e \"import {pool} from './src/config/database.js'; pool.query('SELECT NOW()').then(r => console.log('DB OK:', r.rows[0])).finally(() => pool.end())\"",
-    "web": "cd web && npm run dev"
+    "web": "cd web && npm run dev",
+    "dev:start": "./scripts/dev.sh start",
+    "dev:stop": "./scripts/dev.sh stop",
+    "dev:restart": "./scripts/dev.sh restart",
+    "dev:logs": "./scripts/dev.sh logs",
+    "dev:logs:web": "./scripts/dev.sh logs:web",
+    "dev:logs:backend": "./scripts/dev.sh logs:backend",
+    "dev:logs:db": "./scripts/dev.sh logs:db",
+    "dev:shell:backend": "./scripts/dev.sh shell:backend",
+    "dev:shell:web": "./scripts/dev.sh shell:web",
+    "dev:shell:db": "./scripts/dev.sh shell:db",
+    "dev:migrate": "./scripts/dev.sh migrate",
+    "dev:agent": "./scripts/dev.sh agent",
+    "dev:reset": "./scripts/dev.sh reset",
+    "dev:clean": "./scripts/dev.sh clean",
+    "dev:help": "./scripts/dev.sh help"
   },
   "keywords": [
     "leadgen",

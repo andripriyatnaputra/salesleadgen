@@ -1,0 +1,20 @@
+# Development Dockerfile for Next.js Dashboard
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies)
+RUN npm install
+
+# Copy source code (will be overridden by volume mount)
+COPY . .
+
+# Expose Next.js dev server port
+EXPOSE 3100
+
+# Start Next.js in development mode with hot reload
+CMD ["npm", "run", "dev"]

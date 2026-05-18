@@ -89,8 +89,8 @@ Add the following secrets:
 
 | Secret Name | Description | Example |
 |-------------|-------------|---------|
-| `DEPLOY_HOST` | Production server IP | `123.45.67.89` |
-| `DEPLOY_USER` | SSH user for deployment | `ubuntu` |
+| `DEPLOY_HOST` | Production server IP | `202.50.203.136` |
+| `DEPLOY_USER` | SSH user for deployment | `it` |
 | `DEPLOY_SSH_KEY` | Private SSH key | `-----BEGIN RSA PRIVATE KEY-----...` |
 
 ### 2. Generate SSH Key for Deployment

@@ -6,6 +6,7 @@ import { sleep } from "../../config/claude.js";
 // ─── Konfigurasi ──────────────────────────────────────────────────────────────
 
 const BASE_URL    = "https://eproc.bpjsketenagakerjaan.go.id";
+const API_URL     = `${BASE_URL}/services/pengumuman/getPengumumanTenderAll`;
 const LIST_PATH   = "/pengumuman-tender";
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
@@ -86,7 +87,51 @@ function isDateValid(dateStr: string): boolean {
   }
 }
 
-// ─── Scrape Listing ───────────────────────────────────────────────────────────
+// ─── API with Encrypted Response ──────────────────────────────────────────────
+
+/**
+ * BPJS API returns encrypted data:
+ * {"data": "50ffb02ee73ad0d38ac947367660b2a9..."}
+ *
+ * Data is encrypted (likely AES or custom) and decrypted by frontend JavaScript.
+ * Without the decryption key/algorithm, we cannot parse this response.
+ */
+async function tryEncryptedAPI(): Promise<any | null> {
+  try {
+    console.log(`[BPJS Agent] Mencoba API endpoint: ${API_URL}`);
+
+    const res = await axios.get(API_URL, {
+      params: { page: 1, length: 9999 },
+      timeout: 20_000,
+      headers: {
+        "User-Agent": UA,
+        "Accept": "application/json",
+        "Referer": BASE_URL,
+      },
+      validateStatus: (s) => s < 500,
+    });
+
+    if (res.status === 200 && res.data?.data) {
+      const encryptedData = res.data.data;
+      console.log(`[BPJS Agent] ✅ API response received`);
+      console.log(`[BPJS Agent] ⚠️  Data encrypted: ${encryptedData.substring(0, 80)}...`);
+      console.log(`[BPJS Agent] ❌ Cannot decrypt without key`);
+      console.log(`[BPJS Agent] 💡 Rekomendasi:`);
+      console.log(`    1. Request API documentation dari BPJS`);
+      console.log(`    2. Reverse engineering JavaScript decoder (kompleks)`);
+      console.log(`    3. Monitoring manual melalui website`);
+
+      return null; // Cannot decrypt
+    }
+
+    return null;
+  } catch (err) {
+    console.warn(`[BPJS Agent] API error: ${(err as Error).message}`);
+    return null;
+  }
+}
+
+// ─── Scrape Listing (Fallback) ───────────────────────────────────────────────
 
 interface BpjsTender {
   id:       string;
@@ -222,6 +267,15 @@ function toLog(t: BpjsTender): Lead {
 export async function fetchBpjsTenders(): Promise<Lead[]> {
   console.log("[BPJS Agent] Memulai — eproc.bpjsketenagakerjaan.go.id");
 
+  // Try API endpoint first (will fail due to encryption)
+  const apiData = await tryEncryptedAPI();
+
+  if (!apiData) {
+    console.log("[BPJS Agent] Selesai. 0 tender (API ter-encrypt, tidak bisa di-parse).");
+    return [];
+  }
+
+  // If API works, this code will never run (for now)
   const allTenders = await fetchListing();
   console.log(`[BPJS Agent] ${allTenders.length} tender ditemukan dari listing`);
 

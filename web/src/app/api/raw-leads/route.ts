@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import pkg from "pg";
 const { Pool } = pkg;
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const DATABASE_URL = process.env.DATABASE_URL ||
   "postgres://sales:sales123@localhost:5433/salesdb?sslmode=disable";
 

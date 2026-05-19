@@ -23,7 +23,7 @@ services:
     networks:
       - starcom-network
 
-  # Backend - Scraping Agents (Development with hot reload)
+  # Backend - API Server & Scraping Agents (Development with hot reload)
   backend:
     build:
       context: .
@@ -33,8 +33,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    ports:
+      - "3001:3001"
     environment:
       NODE_ENV: development
+      PORT: 3001
       DATABASE_URL: postgres://sales:sales123@postgres:5432/salesdb?sslmode=disable
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       PENGADAAN_EMAIL: ${PENGADAAN_EMAIL}
@@ -49,7 +52,7 @@ services:
       - ./logs:/app/logs
     networks:
       - starcom-network
-    command: ["tail", "-f", "/dev/null"]  # Keep container running for manual commands
+    command: ["npx", "tsx", "watch", "src/server.ts"]  # Run API server with hot reload
 
   # Frontend - Next.js Dashboard (Development with hot reload)
   web:
@@ -64,6 +67,7 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: postgres://sales:sales123@postgres:5432/salesdb?sslmode=disable
+      BACKEND_URL: http://backend:3001
     volumes:
       - ./web/src:/app/src
       - ./web/public:/app/public

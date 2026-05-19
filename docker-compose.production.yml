@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Backend - Scraping Agents
+  # Backend - API Server & Scraping Agents
   backend:
     image: ghcr.io/andripriyatnaputra/salesleadgen-backend:latest
     container_name: starcom-leadgen-backend
@@ -9,8 +9,11 @@ services:
     pull_policy: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    ports:
+      - "3001:3001"
     environment:
       NODE_ENV: production
+      PORT: 3001
       DATABASE_URL: postgres://sales:${POSTGRES_PASSWORD:-sales123}@host.docker.internal:5433/salesdb?sslmode=disable
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       PENGADAAN_EMAIL: ${PENGADAAN_EMAIL}
@@ -19,13 +22,8 @@ services:
       CIVD_USERNAME: ${CIVD_USERNAME}
       CIVD_PASSWORD: ${CIVD_PASSWORD}
       HUNTER_API_KEY: ${HUNTER_API_KEY}
-    volumes:
-      - ./src/output:/app/src/output
-      - ./logs:/app/logs
     networks:
       - starcom-network
-    # Run agents on schedule (using cron in container or external scheduler)
-    command: ["npx", "tsx", "src/agents-runner.ts", "civd", "pengadaan", "bjb", "airnav", "pamjaya"]
 
   # Frontend - Next.js Dashboard
   web:
@@ -40,6 +38,7 @@ services:
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://sales:${POSTGRES_PASSWORD:-sales123}@host.docker.internal:5433/salesdb?sslmode=disable
+      BACKEND_URL: http://backend:3001
     ports:
       - "3100:3100"
     networks:

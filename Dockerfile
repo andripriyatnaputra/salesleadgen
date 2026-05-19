@@ -21,9 +21,10 @@ RUN npm install -D typescript tsx @types/node
 
 # Environment variables
 ENV NODE_ENV=production
+ENV PORT=3001
 
-# Expose port (if needed for API)
-EXPOSE 3000
+# Expose API port
+EXPOSE 3001
 
-# Default command - run agents manually or via cron
-CMD ["npx", "tsx", "src/agents-runner.ts"]
+# Run HTTP server for on-demand agent execution
+CMD ["npx", "tsx", "src/server.ts"]

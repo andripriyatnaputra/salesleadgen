@@ -121,7 +121,14 @@ async function buildAuthHeaders(): Promise<AuthHeaders> {
     return { Authorization: `Bearer ${envToken}` };
   }
 
-  // Opsi 2: login otomatis via OAuth PKCE flow
+  // Opsi 2: Cookie manual dari browser DevTools
+  const envCookie = process.env["PENGADAAN_COOKIE"]?.trim();
+  if (envCookie) {
+    console.log("[Pengadaan Agent] Menggunakan session cookie dari PENGADAAN_COOKIE");
+    return { Cookie: envCookie };
+  }
+
+  // Opsi 3: login otomatis via OAuth PKCE flow
   const email    = process.env["PENGADAAN_EMAIL"]?.trim();
   const password = process.env["PENGADAAN_PASSWORD"]?.trim();
   if (!email || !password) return {};

@@ -45,7 +45,7 @@ nano .env
 - `ANTHROPIC_API_KEY` - Claude AI API key
 
 **Optional variables:**
-- `PENGADAAN_EMAIL` / `PENGADAAN_PASSWORD` - For authenticated scraping
+- `PENGADAAN_TOKEN` / `PENGADAAN_COOKIE` / `PENGADAAN_EMAIL` + `PENGADAAN_PASSWORD` - Pengadaan.com auth (pilih salah satu)
 - `CIVD_USERNAME` / `CIVD_PASSWORD` - CIVD credentials
 - `HUNTER_API_KEY` - Email enrichment service
 

@@ -55,13 +55,19 @@ Salin `.env` dan isi nilai berikut:
 ```
 ANTHROPIC_API_KEY=your_api_key_here
 
+# Pengadaan.com (pilih salah satu)
+PENGADAAN_COOKIE=_ga=xxx; _session=xxx  # Recommended
+# PENGADAAN_TOKEN=bearer_token
+# PENGADAAN_EMAIL=email
+# PENGADAAN_PASSWORD=password
 
-# Opsional untuk enrichment
-HUNTER_API_KEY=your_hunter_key
-
-# Kredensial CIVD Starcom (jika sudah terdaftar)
+# CIVD Starcom
 CIVD_USERNAME=starcom_username
-CIVD_PASSWORD=starcom_password```
+CIVD_PASSWORD=starcom_password
+
+# Email enrichment (optional)
+HUNTER_API_KEY=your_hunter_key
+```
 
 ## Output
 

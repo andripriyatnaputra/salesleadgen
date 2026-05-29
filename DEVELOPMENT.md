@@ -205,9 +205,11 @@ DATABASE_URL=postgres://sales:sales123@localhost:5433/salesdb?sslmode=disable
 # Claude AI
 ANTHROPIC_API_KEY=your_api_key_here
 
-# Pengadaan.com (Optional)
-PENGADAAN_EMAIL=your_email
-PENGADAAN_PASSWORD=your_password
+# Pengadaan.com (Optional - pilih salah satu)
+PENGADAAN_COOKIE=_ga=xxx; _session=xxx  # Recommended: copy dari browser
+# PENGADAAN_TOKEN=your_bearer_token
+# PENGADAAN_EMAIL=your_email
+# PENGADAAN_PASSWORD=your_password
 
 # CIVD (Optional)
 CIVD_USERNAME=starcom_username

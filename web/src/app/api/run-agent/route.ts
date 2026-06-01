@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bjb" | "airnav" | "classifier" | "qualifier" | "outreach";
+type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bjb" | "airnav" | "spse-komdigi" | "classifier" | "qualifier" | "outreach";
 
 export async function POST(request: NextRequest) {
   const { agents } = await request.json() as { agents: AgentType[] };

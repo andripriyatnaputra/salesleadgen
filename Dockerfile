@@ -2,19 +2,20 @@
 FROM node:20-slim
 
 # Install Chrome dependencies for Puppeteer
+# Note: Debian Bookworm (node:20-slim) doesn't use t64 suffix
 RUN apt-get update && apt-get install -y \
-    libasound2t64 \
-    libatk-bridge2.0-0t64 \
-    libatk1.0-0t64 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
     libatspi2.0-0 \
     libc6 \
     libcairo2 \
-    libcups2t64 \
+    libcups2 \
     libdbus-1-3 \
     libdrm2 \
     libexpat1 \
     libgbm1 \
-    libglib2.0-0t64 \
+    libglib2.0-0 \
     libnspr4 \
     libnss3 \
     libpango-1.0-0 \
@@ -30,6 +31,7 @@ RUN apt-get update && apt-get install -y \
     libxshmfence1 \
     ca-certificates \
     fonts-liberation \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory

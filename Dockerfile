@@ -4,6 +4,8 @@ FROM node:20-slim
 # Install Chrome dependencies for Puppeteer
 # Note: Debian Bookworm (node:20-slim) doesn't use t64 suffix
 RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    fonts-liberation \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
@@ -29,9 +31,8 @@ RUN apt-get update && apt-get install -y \
     libxkbcommon0 \
     libxrandr2 \
     libxshmfence1 \
-    ca-certificates \
-    fonts-liberation \
     wget \
+    tar \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -39,7 +40,10 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
+# Puppeteer will download Chrome on first run, skip at build time
+ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm ci --only=production
+ENV PUPPETEER_SKIP_DOWNLOAD=false
 
 # Copy source code
 COPY src ./src

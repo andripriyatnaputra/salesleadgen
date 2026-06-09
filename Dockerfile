@@ -40,10 +40,10 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-# Puppeteer will download Chrome on first run, skip at build time
-ENV PUPPETEER_SKIP_DOWNLOAD=true
 RUN npm ci --only=production
-ENV PUPPETEER_SKIP_DOWNLOAD=false
+
+# Install Chrome for Puppeteer
+RUN npx puppeteer browsers install chrome
 
 # Copy source code
 COPY src ./src

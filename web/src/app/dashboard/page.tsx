@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bjb" | "airnav" | "spse-komdigi" | "classifier" | "qualifier" | "outreach";
+type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bjb" | "airnav" | "spse-komdigi" | "sirup" | "classifier" | "qualifier" | "outreach";
 
 interface AgentConfig {
   id: AgentType;
@@ -68,6 +68,13 @@ const AGENTS: AgentConfig[] = [
     description: "Scrape tender Pasca Kualifikasi dari spse.inaproc.id/komdigi",
     category: "scraping",
     icon: "🏛️",
+  },
+  {
+    id: "sirup",
+    name: "SIRUP",
+    description: "Scrape RUP dari sirup.inaproc.id (Puppeteer)",
+    category: "scraping",
+    icon: "📋",
   },
   {
     id: "classifier",

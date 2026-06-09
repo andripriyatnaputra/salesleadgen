@@ -9,6 +9,7 @@ import { fetchBpjsTenders } from "./agents/sources/bpjsAgent.js";
 import { fetchBjbTenders } from "./agents/sources/bjbAgent.js";
 import { fetchAirnavTenders } from "./agents/sources/airnavAgent.js";
 import { fetchSPSEKomdigiTenders } from "./agents/sources/spseKomdigiAgent.js";
+import { fetchSirupPackagesBrowser } from "./agents/sources/sirupAgentBrowser.js";
 import { classifyLeads } from "./agents/classifierAgent.js";
 import { qualifyLeads, type QualifiedLead } from "./agents/qualifierAgent.js";
 import { generateOutreach } from "./agents/outreachAgent.js";
@@ -18,7 +19,7 @@ import { LeadRepository, pool, type RawLead } from "./config/database.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = join(__dirname, "output");
 
-type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bpjs" | "bjb" | "airnav" | "spse-komdigi" | "classifier" | "qualifier" | "outreach";
+type AgentType = "pengadaan" | "civd" | "civd-file" | "pamjaya" | "kai" | "bpjs" | "bjb" | "airnav" | "spse-komdigi" | "sirup" | "classifier" | "qualifier" | "outreach";
 
 function leadToDbFormat(lead: Lead): RawLead {
   return {
@@ -100,7 +101,7 @@ async function main() {
   console.log(`Agent yang dipilih: ${selectedAgents.join(", ")}\n`);
 
   const hasScraping = selectedAgents.some((a) =>
-    ["pengadaan", "civd", "civd-file", "pamjaya", "kai", "bpjs", "bjb", "airnav"].includes(a)
+    ["pengadaan", "civd", "civd-file", "pamjaya", "kai", "bpjs", "bjb", "airnav", "spse-komdigi", "sirup"].includes(a)
   );
   const hasProcessing = selectedAgents.some((a) =>
     ["classifier", "qualifier", "outreach"].includes(a)
@@ -194,6 +195,13 @@ async function main() {
       const leads = await fetchSPSEKomdigiTenders();
       results.push(leads);
       console.log(`     ✓ ${leads.length} leads dari SPSE Komdigi`);
+    }
+
+    if (selectedAgents.includes("sirup")) {
+      console.log("  → SIRUP (Rencana Umum Pengadaan)...");
+      const leads = await fetchSirupPackagesBrowser();
+      results.push(leads);
+      console.log(`     ✓ ${leads.length} leads dari SIRUP`);
     }
 
     // Deduplikasi berdasarkan ID atau kombinasi URL + nama proyek

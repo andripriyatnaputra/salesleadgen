@@ -6,6 +6,8 @@
 - PostgreSQL 15+
 - Node.js 18+ (for development)
 - GitHub account with repository access
+- **Minimum 2GB RAM** (4GB recommended for Puppeteer/SIRUP agent)
+- **Ubuntu 22.04+** or Debian 12+ (for Chrome dependencies)
 
 ## Production Deployment
 
@@ -142,14 +144,20 @@ git push origin main
 ### Run Specific Agents
 
 ```bash
-# Run all agents
-docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents-runner.ts civd pengadaan bjb airnav pamjaya
+# Run all scraping agents
+docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents-runner.ts civd pengadaan bjb airnav pamjaya sirup spse-komdigi
 
 # Run single agent
 docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents-runner.ts civd
 
+# Run SIRUP agent only (uses Puppeteer)
+docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents-runner.ts sirup
+
 # Run CIVD with procurement list file
 docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents-runner.ts civd-file
+
+# Test SIRUP agent standalone
+docker-compose -f docker-compose.production.yml run --rm backend npx tsx src/agents/sources/test-sirup-puppeteer.ts
 ```
 
 ### Schedule with Cron
@@ -240,6 +248,49 @@ cat .env | grep DATABASE_URL
 sudo lsof -i :3100
 
 # Stop conflicting service or change port in docker-compose.production.yml
+```
+
+### SIRUP Agent / Puppeteer Issues
+
+**Problem**: "Failed to launch browser" error
+
+**Solution**: Backend Docker image needs Chrome dependencies. Dockerfile already includes them, but verify:
+
+```bash
+# Check if running correct image
+docker-compose -f docker-compose.production.yml exec backend which chromium
+
+# Rebuild backend image if needed
+docker-compose -f docker-compose.production.yml build --no-cache backend
+docker-compose -f docker-compose.production.yml up -d backend
+
+# Test Puppeteer inside container
+docker-compose -f docker-compose.production.yml exec backend npx tsx src/agents/sources/test-sirup-puppeteer.ts
+```
+
+**Problem**: Out of memory when running SIRUP agent
+
+**Solution**: Add swap space or limit Docker memory:
+
+```bash
+# Add 2GB swap
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+**Problem**: SIRUP returns 0 results
+
+**Solution**: Check network and table structure:
+
+```bash
+# Test from container
+docker-compose -f docker-compose.production.yml exec backend curl -I https://sirup.inaproc.id
+
+# View SIRUP agent logs
+docker-compose -f docker-compose.production.yml logs backend | grep SIRUP
 ```
 
 ## Update Deployment

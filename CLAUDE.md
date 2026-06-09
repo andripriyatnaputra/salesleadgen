@@ -5,7 +5,7 @@ Sistem lead generation otomatis untuk PT Starcom Solusindo menggunakan Claude AI
 PT. Starcom Solusindo (starcoms.net) — perusahaan IT Solutions berbasis di Bandung yang menyediakan: BWA/WiMAX, jaringan komputer (LAN/WAN), IT infrastructure, cybersecurity, sistem integrasi, CCTV, cloud services, dan software development (custom app, web, mobile, ERP).
 
 ## Tujuan
-Mengambil data tender dari sumber publik (LPSE, CIVD, Pengadaan.go.id), mengklasifikasikan relevansi, memperkaya data kontak, mengkualifikasi prospek, dan menghasilkan email outreach yang dipersonalisasi.
+Mengambil data tender dari sumber publik (LPSE, SIRUP, CIVD, Pengadaan.go.id), mengklasifikasikan relevansi, memperkaya data kontak, mengkualifikasi prospek, dan menghasilkan email outreach yang dipersonalisasi.
 
 ## Target ICP (Ideal Customer Profile)
 - Industri prioritas: Migas, Pertambangan, Pemerintah, BUMN,
@@ -28,6 +28,7 @@ Mengambil data tender dari sumber publik (LPSE, CIVD, Pengadaan.go.id), mengklas
 | Agent | File | Fungsi |
 |---|---|---|
 | LPSE Agent | `src/agents/sources/lpseAgent.ts` | Scrape tender dari lpse.lkpp.go.id |
+| SIRUP Agent | `src/agents/sources/sirupAgent.ts` | Scrape RUP dari sirup.inaproc.id |
 | CIVD Agent | `src/agents/sources/civdAgent.ts` | Scrape data vendor dari CIVD |
 | Pengadaan Agent | `src/agents/sources/pengadaanAgent.ts` | Scrape dari pengadaan.go.id |
 | Classifier | `src/agents/classifierAgent.ts` | Klasifikasi relevansi tender (IT, jaringan, software) |

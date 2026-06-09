@@ -21,7 +21,7 @@ export const SCRAPE_DELAY_MS = 2500;
 
 // ─── Tipe Sumber Data ────────────────────────────────────────────────────────
 
-export type LeadSource = "LPSE" | "CIVD" | "PENGADAAN" | "BJB" | "BPJS" | "AIRNAV" | "PAM_JAYA" | "SPSE_KOMDIGI";
+export type LeadSource = "LPSE" | "CIVD" | "PENGADAAN" | "BJB" | "BPJS" | "AIRNAV" | "PAM_JAYA" | "SPSE_KOMDIGI" | "SIRUP";
 
 // ─── ICP (Ideal Customer Profile) ────────────────────────────────────────────
 

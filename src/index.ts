@@ -5,6 +5,7 @@ import { fetchPengadaanTenders }   from "./agents/sources/pengadaanAgent.js";
 import { fetchCivdSkkMigas }       from "./agents/sources/civdAgent.js";
 import { fetchPamJayaTenders }     from "./agents/sources/pamJayaAgent.js";
 import { fetchKaiTenders }         from "./agents/sources/kaiAgent.js";
+import { fetchSirupPackages }      from "./agents/sources/sirupAgent.js";
 import { classifyLeads }           from "./agents/classifierAgent.js";
 import { qualifyLeads }            from "./agents/qualifierAgent.js";
 import { generateOutreach }        from "./agents/outreachAgent.js";
@@ -36,27 +37,28 @@ function saveRawLeads(leads: Lead[]): void {
 
 async function main() {
   console.log("=== Starcom Solusindo — Lead Generation Pipeline ===\n");
-  console.log("Sumber aktif : tender.pengadaan.com, CIVD SKK Migas, PAM Jaya, KAI RAPID");
-  console.log("LPSE/SIRUP   : dinonaktifkan sementara\n");
+  console.log("Sumber aktif : tender.pengadaan.com, CIVD SKK Migas, PAM Jaya, KAI RAPID, SIRUP\n");
 
   // ── 1. Scraping — semua sumber paralel ───────────────────────────────────
   console.log("[1/5] Mengambil tender dari semua sumber...");
-  const [pengadaanLeads, civdLeads, pamJayaLeads, kaiLeads] = await Promise.all([
+  const [pengadaanLeads, civdLeads, pamJayaLeads, kaiLeads, sirupLeads] = await Promise.all([
     fetchPengadaanTenders(),
     fetchCivdSkkMigas(),
     fetchPamJayaTenders(),
     fetchKaiTenders(),
+    fetchSirupPackages(),
   ]);
 
   console.log(`      tender.pengadaan.com : ${pengadaanLeads.length} leads`);
   console.log(`      CIVD SKK Migas       : ${civdLeads.length} leads`);
   console.log(`      PAM Jaya             : ${pamJayaLeads.length} leads`);
   console.log(`      KAI RAPID            : ${kaiLeads.length} leads`);
+  console.log(`      SIRUP                : ${sirupLeads.length} leads`);
 
   // Gabung & deduplikasi berdasarkan URL
   const seen  = new Set<string>();
   const rawLeads: Lead[] = [];
-  for (const lead of [...pengadaanLeads, ...civdLeads, ...pamJayaLeads, ...kaiLeads]) {
+  for (const lead of [...pengadaanLeads, ...civdLeads, ...pamJayaLeads, ...kaiLeads, ...sirupLeads]) {
     if (!seen.has(lead.url)) {
       seen.add(lead.url);
       rawLeads.push(lead);
@@ -91,7 +93,7 @@ async function main() {
   console.log(`      ${output.totalLeads} email draft tersimpan.\n`);
 
   console.log("=== Pipeline Selesai ===");
-  console.log(`raw-leads.json : ${rawLeads.length} leads (pengadaan.com: ${pengadaanLeads.length} | CIVD: ${civdLeads.length} | PAM Jaya: ${pamJayaLeads.length} | KAI: ${kaiLeads.length})`);
+  console.log(`raw-leads.json : ${rawLeads.length} leads (pengadaan.com: ${pengadaanLeads.length} | CIVD: ${civdLeads.length} | PAM Jaya: ${pamJayaLeads.length} | KAI: ${kaiLeads.length} | SIRUP: ${sirupLeads.length})`);
   console.log(`outreach.json  : ${output.totalLeads} leads (sudah ada score + email draft)`);
 }
 

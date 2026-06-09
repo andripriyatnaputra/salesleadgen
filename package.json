@@ -9,6 +9,7 @@
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "agents": "tsx src/agents-runner.ts",
+    "test:sirup": "tsx src/agents/sources/test-sirup.ts",
     "db:migrate": "tsx database/migrate.ts",
     "db:test": "tsx -e \"import {pool} from './src/config/database.js'; pool.query('SELECT NOW()').then(r => console.log('DB OK:', r.rows[0])).finally(() => pool.end())\"",
     "web": "cd web && npm run dev",
@@ -46,7 +47,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^4.21.2",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "puppeteer": "^25.1.0"
   },
   "devDependencies": {
     "@types/node": "^25.6.2",
